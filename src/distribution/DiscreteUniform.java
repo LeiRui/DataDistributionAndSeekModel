@@ -1,0 +1,63 @@
+package distribution;
+
+import java.util.Random;
+
+public class DiscreteUniform extends DistributionFunc{
+    /*
+    离散点均匀分布:start, start+delta, ..., start+(number-1)*delta
+     */
+    public double start;//起点
+    public double delta;//间距
+    public int number;//段数 should >=1
+
+
+    public double getPoint(double point) {
+        return (double)1/number;
+    }
+
+    public double getLeftRangeExclude(double point) {
+        double res = 0;
+        double x=start;
+        double unit = (double)1/number;
+        int count = 1;
+        while(x<point && count <= number) {
+           res += unit;
+           x += delta;
+           ++count;
+        }
+        return res;
+    }
+
+    public double getRightRangeExclude(double point) {
+        double res = 0;
+        double x=start;
+        double unit = (double)1/number;
+        int count = 1;
+        while(count <= number) {
+            if(x>point) {
+                res+=unit;
+            }
+            x += delta;
+            ++count;
+        }
+        return res;
+    }
+
+    public DiscreteUniform(double start, double delta, int number) {
+        this.start = start;
+        this.delta = delta;
+        this.number = number;
+    }
+
+    /*
+      随机给出一个满足分布参数的值
+     */
+    public double getValue(){
+        Random rand = new Random();
+        int random = rand.nextInt(number)+1; // 生成[1,number]区间内的随机数
+        double res = start + (random-1) * delta;
+        return res;
+    }
+
+
+}
